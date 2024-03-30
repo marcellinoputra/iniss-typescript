@@ -1,0 +1,23 @@
+.custom-select {
+  border-radius: 10px;
+  outline: none !important;
+}
+
+.filter_style {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  margin-top: 10px;
+}
+
+@media (max-width: 768px) {
+  .filter_style {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .btn_absen {
+    width: 50%;
+  }
+}
