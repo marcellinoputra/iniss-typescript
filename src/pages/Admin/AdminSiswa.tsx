@@ -18,8 +18,8 @@ import {
 } from "@mui/material";
 import { useAdminSiswa } from "../../store/admin/admin_siswa.store";
 import { ToastContainer } from "react-toastify";
-import Pagination from '@mui/material/Pagination';
-import Stack from '@mui/material/Stack';
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
 import { SiswaData } from "../../models/siswa_dao";
 
 const boxStyle = {
@@ -33,8 +33,6 @@ const boxStyle = {
   boxShadow: 24,
   p: 4,
 };
-
-
 
 export default function AdminSiswa() {
   // Store
@@ -67,16 +65,22 @@ export default function AdminSiswa() {
   function censorUsername(username: string) {
     // Check if the username length is more than 4 characters
     if (username.length > 2) {
-      return username.substring(0, 2) + '*'.repeat(username.length - 2);
+      return username.substring(0, 2) + "*".repeat(username.length - 2);
     } else if (username.length > 6) {
-      return username.substring(0, 6) + '*'.repeat(username.length - 6);
+      return username.substring(0, 6) + "*".repeat(username.length - 6);
     } else {
       // If the username is 4 characters or less, return it as is
       return username;
     }
   }
 
-  const handleOpenEdit = (id: number, nama: string, username: string, password: string, kelas: number) => {
+  const handleOpenEdit = (
+    id: number,
+    nama: string,
+    username: string,
+    password: string,
+    kelas: number
+  ) => {
     setEditId(id);
     setEditNama(nama);
     setEditUsername(username);
@@ -96,9 +100,12 @@ export default function AdminSiswa() {
     siswaState.fetchKelas();
   }, []);
 
-  const handleChangePaginationSiswa = (event: React.ChangeEvent<unknown>, value: number) => {
-    console.log("value", value)
-    siswaState.fetchSiswa(value)
+  const handleChangePaginationSiswa = (
+    event: React.ChangeEvent<unknown>,
+    value: number
+  ) => {
+    console.log("value", value);
+    siswaState.fetchSiswa(value);
   };
 
   return (
@@ -239,13 +246,18 @@ export default function AdminSiswa() {
           </TableBody>
         </Table>
       </TableContainer>
-      <Stack spacing={2} sx={{
-        marginTop: 3
-      }}>
-        <Pagination count={siswaState?.totalPageSiswa} color="primary" onChange={handleChangePaginationSiswa} />
+      <Stack
+        spacing={2}
+        sx={{
+          marginTop: 3,
+        }}
+      >
+        <Pagination
+          count={siswaState?.totalPageSiswa}
+          color="primary"
+          onChange={handleChangePaginationSiswa}
+        />
       </Stack>
-
-
 
       {/* Modal Create*/}
       <Modal
@@ -254,7 +266,7 @@ export default function AdminSiswa() {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={boxStyle} noValidate autoComplete="off">
+        <Box sx={boxStyle}>
           <div
             style={{
               display: "flex",

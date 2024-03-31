@@ -11,7 +11,7 @@ import Signin from "../pages/Signin.jsx";
 import ErrorNotFound from "../pages/ErrorNotFound.jsx";
 import HasilUlangan from "../pages/HasilUlangan.jsx";
 import AppAdmin from "../AppAdmin.jsx";
-import AdminGuru from "../pages/Admin/AdminGuru.jsx";
+import AdminGuru from "../pages/Admin/AdminGuru.js";
 import AdminKelas from "../pages/Admin/AdminKelas.jsx";
 import AdminMapel from "../pages/Admin/AdminMapel.jsx";
 import AdminSiswa from "../pages/Admin/AdminSiswa.js";

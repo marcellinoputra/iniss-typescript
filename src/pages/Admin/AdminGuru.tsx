@@ -1,6 +1,4 @@
-import React, { useEffect, useState } from "react";
-import cryptoJS from "crypto-js";
-import axiosNew from "../../components/AxiosConfig";
+import { useEffect, useState } from "react";
 import { useAdminGuru } from "../../store/admin/admin_guru.store";
 import {
   Box,
@@ -11,8 +9,10 @@ import {
   InputAdornment,
   MenuItem,
   Modal,
+  Pagination,
   Paper,
   Select,
+  Stack,
   Table,
   TableBody,
   TableCell,
@@ -25,12 +25,12 @@ import {
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { ToastContainer } from "react-toastify";
 
-const override = (React.CSSProperties = {
-  transform: "translate(-50%, -50%)",
-  top: "50%",
-  left: "50%",
-  position: "absolute",
-});
+// const override = (React.CSSProperties = {
+//   transform: "translate(-50%, -50%)",
+//   top: "50%",
+//   left: "50%",
+//   position: "absolute",
+// });
 
 const style = {
   position: "absolute",
@@ -46,22 +46,28 @@ const style = {
 
 export default function AdminGuru() {
   //Use State For Input
-  const [addNama, setAddNama] = useState("");
-  const [addUsername, setAddUsername] = useState("");
-  const [addPassword, setAddPassword] = useState("");
-  const [editId, setEditId] = useState(0);
-  const [editNama, setEditNama] = useState("");
-  const [editUsername, setEditUsername] = useState("");
-  const [editStatusUser, setEditStatusUser] = useState(0);
+  const [addNama, setAddNama] = useState<string>("");
+  const [addUsername, setAddUsername] = useState<string>("");
+  const [addPassword, setAddPassword] = useState<string>("");
+  const [editId, setEditId] = useState<number>(0);
+  const [editNama, setEditNama] = useState<string>("");
+  const [editUsername, setEditUsername] = useState<string>("");
+  const [editStatusUser, setEditStatusUser] = useState<number>(0);
 
   //zustand store
   const guruState = useAdminGuru((state) => state);
 
   //Modal Open For Edit Data Guru
-  function handleOpenEditGuru(id, nama, username, password) {
+  function handleOpenEditGuru(
+    id: number,
+    nama: string,
+    username: string,
+    status_user: number
+  ) {
     setEditId(id);
     setEditNama(nama);
     setEditUsername(username);
+    setEditStatusUser(status_user);
     guruState.onOpenEditModal();
   }
 
@@ -74,28 +80,31 @@ export default function AdminGuru() {
   };
 
   //Modal Open For Delete Guru
-  function handleOpenDeleteGuru(id) {
+  function handleOpenDeleteGuru(id: number) {
     setEditId(id);
     guruState.onOpenDeleteModal();
   }
 
   const userAgent = navigator.userAgent;
 
-  //Generate Password
-  function generatePassword(length, options) {
-    const optionsChars = {
+  // Generate Password
+  function generatePassword(
+    length: number,
+    options: { [key: string]: boolean }
+  ) {
+    const optionsChars: { [key: string]: string } = {
       digits: "1234567890",
       lowercase: "abcdefghijklmnopqrstuvwxyz",
       uppercase: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
       symbols: "!@#$%^&",
     };
 
-    const chars = [];
+    const chars: string[] = [];
     for (let key in options) {
       if (
-        options.hasOwnProperty(key) &&
+        Object.prototype.hasOwnProperty.call(options, key) &&
         options[key] &&
-        optionsChars.hasOwnProperty(key)
+        Object.prototype.hasOwnProperty.call(optionsChars, key)
       ) {
         chars.push(optionsChars[key]);
       }
@@ -115,16 +124,23 @@ export default function AdminGuru() {
     return password;
   }
 
-  const passwordLength = 12;
-  const passwordOptions = {
+  const passwordLength: number = 12;
+  const passwordOptions: { [key: string]: boolean } = {
     digits: true,
     lowercase: true,
     uppercase: true,
     symbols: true,
   };
 
+  const generatedPassword = generatePassword(passwordLength, passwordOptions);
+
   function randomizePassword() {
-    setAddPassword(generatePassword(passwordLength, passwordOptions));
+    if (generatedPassword !== null) {
+      setAddPassword(generatedPassword);
+    } else {
+      // Handle the case when generatedPassword is null (optional)
+      console.error("Generated password is null.");
+    }
   }
 
   const statusGuru = [
@@ -140,8 +156,15 @@ export default function AdminGuru() {
     },
   ];
 
+  const handleChangePaginationGuru = (
+    event: React.ChangeEvent<unknown>,
+    value: number
+  ) => {
+    guruState.getGuru(value);
+  };
+
   useEffect(() => {
-    guruState.getGuru();
+    guruState.getGuru(1);
   }, []);
 
   return (
@@ -297,6 +320,18 @@ export default function AdminGuru() {
           </TableBody>
         </Table>
       </TableContainer>
+      <Stack
+        spacing={2}
+        sx={{
+          marginTop: 3,
+        }}
+      >
+        <Pagination
+          count={guruState?.totalPageGuru}
+          color="primary"
+          onChange={handleChangePaginationGuru}
+        />
+      </Stack>
       {/* `Start Modal For Create Guru` */}
       <Modal
         open={guruState.addModalTrigger}
@@ -404,7 +439,12 @@ export default function AdminGuru() {
                   marginTop: 30,
                 }}
                 onClick={() =>
-                  guruState.createGuru(addNama, addUsername, addPassword)
+                  guruState.createGuru(
+                    addNama,
+                    addUsername,
+                    addPassword
+                    // userAgent
+                  )
                 }
                 variant="contained"
               >
@@ -466,7 +506,7 @@ export default function AdminGuru() {
                 autoWidth
                 label="Status Guru"
                 onChange={(e) => {
-                  setEditStatusUser(e.target.value);
+                  setEditStatusUser(Number(e.target.value));
                 }}
               >
                 {statusGuru.map((data) => {
@@ -492,7 +532,7 @@ export default function AdminGuru() {
                 style={{ marginTop: 30 }}
                 onClick={() => {
                   guruState.updateGuru(
-                    editId,
+                    Number(editId),
                     editNama,
                     editUsername,
                     editStatusUser

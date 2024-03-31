@@ -2,6 +2,8 @@ import { create } from "zustand";
 import axiosNew from "../../components/AxiosConfig";
 import { toast } from "react-toastify";
 
+
+
 export const useAdminMapel = create((set, get) => ({
   mapel: [],
   addModalTrigger: false,

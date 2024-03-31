@@ -2,9 +2,20 @@ import { create } from "zustand";
 import axiosNew from "../../components/AxiosConfig";
 import { toast } from "react-toastify";
 
-export const useAdminGuru = create((set, get) => ({
-  guru: [],
+interface AdminGuruDTO {
+  guru_id: number;
+  nama: string;
+  username: string;
+  status_user: number;
+  user_agent: string;
+}
+
+let modelGuru: AdminGuruDTO[] = [];
+
+export const useAdminGuru = create((set: any) => ({
+  guru: modelGuru,
   isLoading: false,
+  totalPageGuru: 0,
   addModalTrigger: false,
   editModalTrigger: false,
   deleteModalTrigger: false,
@@ -39,10 +50,10 @@ export const useAdminGuru = create((set, get) => ({
     set({ deleteModalTrigger: false });
   },
 
-  getGuru: async () => {
+  getGuru: async (page: number) => {
     set({ guru: [] });
     await axiosNew
-      .get("/admin/find-guru", {
+      .get(`/admin/find-guru?page=${page}`, {
         headers: {
           "x-access-token": localStorage.getItem("token"),
         },
@@ -50,11 +61,17 @@ export const useAdminGuru = create((set, get) => ({
       .then((res) => {
         if (res.status === 200) {
           set({ guru: res.data.data });
+          set({ totalPageGuru: res.data.total_page });
           set({ isLoading: false });
         }
       });
   },
-  createGuru: async (nama, username, password, user_agent) => {
+  createGuru: async (
+    nama: string,
+    username: string,
+    password: string
+    // user_agent: string
+  ) => {
     await axiosNew
       .post(
         "/admin/create-guru",
@@ -62,7 +79,7 @@ export const useAdminGuru = create((set, get) => ({
           nama: nama,
           username: username,
           password: password,
-          user_agent: user_agent,
+          // user_agent: user_agent,
         },
         {
           headers: {
@@ -80,7 +97,12 @@ export const useAdminGuru = create((set, get) => ({
         toast.error(err.response.data.message ?? "Something Went Wrong");
       });
   },
-  updateGuru: async (id, nama, username, status_user) => {
+  updateGuru: async (
+    id: number,
+    nama: string,
+    username: string,
+    status_user: number
+  ) => {
     await axiosNew
       .put(
         `/admin/edit-guru/${id}`,
@@ -105,7 +127,7 @@ export const useAdminGuru = create((set, get) => ({
         toast.error(err.response.data.message ?? "Something Went Wrong");
       });
   },
-  deleteGuru: async (id) => {
+  deleteGuru: async (id: number) => {
     await axiosNew
       .delete(`/admin/delete-guru/${id}`, {
         headers: {
