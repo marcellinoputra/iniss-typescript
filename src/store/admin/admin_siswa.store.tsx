@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import axiosNew from "../../components/AxiosConfig";
-import { KelasData, SiswaData, SiswaModels } from "../../models/siswa_dao";
+import { KelasData, SiswaData } from "../../models/siswa_dao";
+import { toast } from "react-toastify";
 
 interface SiswaDto {
   nama: string;
@@ -10,12 +11,12 @@ interface SiswaDto {
 }
 
 let modelSiswa: SiswaData[] = [];
-let modelKleas: KelasData[] = [];
+let modelKelas: KelasData[] = [];
 
 export const useAdminSiswa = create((set: any, get: any) => ({
 
   siswa: modelSiswa,
-  kelas: modelKleas,
+  kelas: modelKelas,
   totalPageSiswa: 0,
   totalPageKelas: 0,
   addModalTrigger: false,
@@ -103,7 +104,7 @@ export const useAdminSiswa = create((set: any, get: any) => ({
         }
       })
       .catch((err) => {
-        // toast.error(err.response.data.message ?? "Something Went Wrong");
+        toast.error(err.response.data.message ?? "Something Went Wrong");
       });
   },
 
@@ -132,7 +133,7 @@ export const useAdminSiswa = create((set: any, get: any) => ({
         }
       })
       .catch((err) => {
-        // toast.error(err.response.data.message ?? "Something Went Wrong");
+        toast.error(err.response.data.message ?? "Something Went Wrong");
       });
   },
 
@@ -153,7 +154,7 @@ export const useAdminSiswa = create((set: any, get: any) => ({
         }
       })
       .catch((err) => {
-        // toast.error(err.response.data.message ?? "Something Went Wrong");
+        toast.error(err.response.data.message ?? "Something Went Wrong");
       });
   },
 

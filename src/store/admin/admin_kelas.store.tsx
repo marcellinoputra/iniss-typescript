@@ -1,11 +1,14 @@
 import { create } from "zustand";
 import axiosNew from "../../components/AxiosConfig";
 import { toast } from "react-toastify";
+import { KelasData, GuruData } from "../../models/kelas_dao";
 
-export const useKelasAdmin = create((set, get) => ({
+let modelKelas: KelasData[] = [];
+let modelGuru: GuruData[] = [];
 
-  kelas: [],
-  guru: [],
+export const useKelasAdmin = create((set: any, get: any) => ({
+  kelas: modelKelas,
+  guru: modelGuru,
   isLoading: false,
   addModalTrigger: false,
   editModalTrigger: false,
@@ -63,7 +66,11 @@ export const useKelasAdmin = create((set, get) => ({
       });
   },
 
-  submitKelas: async (guru_id, nomor_kelas, jumlah_orang) => {
+  submitKelas: async (
+    guru_id: number,
+    nomor_kelas: string,
+    jumlah_orang: number
+  ) => {
     set({ isLoading: true });
     await axiosNew
       .post(
@@ -91,7 +98,12 @@ export const useKelasAdmin = create((set, get) => ({
       });
   },
 
-  editKelas: async (id, guru_id, nomor_kelas, jumlah_orang) => {
+  editKelas: async (
+    id: number,
+    guru_id: number,
+    nomor_kelas: string,
+    jumlah_orang: number
+  ) => {
     set({ isLoading: true });
     await axiosNew
       .put(
@@ -119,7 +131,7 @@ export const useKelasAdmin = create((set, get) => ({
       });
   },
 
-  deleteKelas: async (id) => {
+  deleteKelas: async (id: number) => {
     await axiosNew
       .delete(`/admin/delete-kelas/${id}`, {
         headers: {

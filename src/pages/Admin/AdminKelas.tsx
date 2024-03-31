@@ -15,7 +15,6 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React from "react";
 import { ToastContainer } from "react-toastify";
 import { useKelasAdmin } from "../../store/admin/admin_kelas.store";
 import { useEffect } from "react";
@@ -34,20 +33,19 @@ const style = {
 };
 
 export default function AdminKelas() {
-
   // State Create
-  const [handleGuru, setHandleGuru] = useState(999);
-  const [addNomorKelas, setAddNomorKelas] = useState("");
-  const [addJumlahMurid, setAddJumlahMurid] = useState(0);
+  const [handleGuru, setHandleGuru] = useState<number>(999);
+  const [addNomorKelas, setAddNomorKelas] = useState<string>("");
+  const [addJumlahMurid, setAddJumlahMurid] = useState<number>(0);
 
   // State Edit
   const [editId, setEditId] = useState(0);
-  const [editHandleGuru, setEditHandleGuru] = useState(999);
-  const [editNomorKelas, setEditNomorKelas] = useState("");
-  const [editJumlahMurid, setEditJumlahMurid] = useState(0);
+  const [editHandleGuru, setEditHandleGuru] = useState<number>(999);
+  const [editNomorKelas, setEditNomorKelas] = useState<string>("");
+  const [editJumlahMurid, setEditJumlahMurid] = useState<number>(0);
 
   // State Delete
-  const [deleteId, setDeleteId] = useState();
+  const [deleteId, setDeleteId] = useState<number>(0);
 
   //Store
   const kelasStore = useKelasAdmin((state) => state);
@@ -65,7 +63,12 @@ export default function AdminKelas() {
   // }
 
   // Open Modal for Edit
-  const handleOpenEdit = (id, guru_id, nomor_kelas, jumlah_orang) => {
+  const handleOpenEdit = (
+    id: number,
+    guru_id: number,
+    nomor_kelas: string,
+    jumlah_orang: number
+  ) => {
     setEditId(id);
     setEditHandleGuru(guru_id);
     setEditNomorKelas(nomor_kelas);
@@ -74,7 +77,7 @@ export default function AdminKelas() {
     kelasStore.openEditModal();
   };
 
-  const handleOpenDelete = (id) => {
+  const handleOpenDelete = (id: number) => {
     setDeleteId(id);
     kelasStore.openDeleteModal();
   };
@@ -244,7 +247,7 @@ export default function AdminKelas() {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={style} autoComplete="off">
+        <Box sx={style}>
           <div
             style={{
               display: "flex",
@@ -270,7 +273,7 @@ export default function AdminKelas() {
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
                 value={handleGuru ?? 999}
-                onChange={(e) => setHandleGuru(e.target.value)}
+                onChange={(e) => setHandleGuru(Number(e.target.value))}
               >
                 <MenuItem value={999} disabled>
                   Pilih Guru
@@ -311,7 +314,7 @@ export default function AdminKelas() {
                 label="Jumlah Murid"
                 type="number"
                 value={addJumlahMurid}
-                onChange={(e) => setAddJumlahMurid(e.target.value)}
+                onChange={(e) => setAddJumlahMurid(Number(e.target.value))}
               />
             </FormControl>
 
@@ -353,7 +356,7 @@ export default function AdminKelas() {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={style} autoComplete="off">
+        <Box sx={style}>
           <div
             style={{
               display: "flex",
@@ -379,7 +382,7 @@ export default function AdminKelas() {
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
                 value={editHandleGuru}
-                onChange={(e) => setEditHandleGuru(e.target.value)}
+                onChange={(e) => setEditHandleGuru(Number(e.target.value))}
               >
                 <MenuItem value={999} disabled>
                   Pilih Guru
@@ -418,7 +421,7 @@ export default function AdminKelas() {
                 label="Jumlah Murid"
                 type="number"
                 value={Number(editJumlahMurid)}
-                onChange={(e) => setEditJumlahMurid(e.target.value)}
+                onChange={(e) => setEditJumlahMurid(Number(e.target.value))}
               />
             </FormControl>
 

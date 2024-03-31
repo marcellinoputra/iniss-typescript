@@ -397,7 +397,7 @@ export default function AdminSiswa() {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={boxStyle} noValidate autoComplete="off">
+        <Box sx={boxStyle}>
           <div
             style={{
               display: "flex",
