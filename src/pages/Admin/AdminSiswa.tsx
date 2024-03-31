@@ -20,6 +20,7 @@ import { useAdminSiswa } from "../../store/admin/admin_siswa.store";
 import { ToastContainer } from "react-toastify";
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
+import { SiswaData } from "../../models/siswa_dao";
 
 const boxStyle = {
   position: "absolute",
@@ -43,17 +44,17 @@ export default function AdminSiswa() {
   const [nama, setNama] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [kelas, setKelas] = useState(null);
+  const [kelas, setKelas] = useState<number>(999);
 
   // State Edit
   const [editId, setEditId] = useState(0);
   const [editNama, setEditNama] = useState("");
   const [editUsername, setEditUsername] = useState("");
   const [editPassword, setEditPassword] = useState("");
-  const [editKelas, setEditKelas] = useState(null);
+  const [editKelas, setEditKelas] = useState<number>(0);
 
   // State Delete
-  const [deleteId, setDeleteId] = useState();
+  const [deleteId, setDeleteId] = useState<number>(0);
 
   const handleClose = () => {
     setNama("");
@@ -63,7 +64,7 @@ export default function AdminSiswa() {
     siswaState.onCloseModal();
   };
 
-  function censorUsername(username) {
+  function censorUsername(username: string) {
     // Check if the username length is more than 4 characters
     if (username.length > 2) {
       return username.substring(0, 2) + '*'.repeat(username.length - 2);
@@ -75,17 +76,17 @@ export default function AdminSiswa() {
     }
   }
 
-  const handleOpenEdit = (id, nama, username, password, kelas) => {
+  const handleOpenEdit = (id: number, nama: string, username: string, password: string, kelas: number) => {
     setEditId(id);
     setEditNama(nama);
     setEditUsername(username);
     setEditPassword(password);
-    setEditKelas(Number(kelas));
+    setEditKelas(kelas);
     // siswaState.editSiswa();
     siswaState.openEditModal();
   };
 
-  const handleOpenDelete = (id) => {
+  const handleOpenDelete = (id: number) => {
     setDeleteId(id);
     siswaState.openDeleteModal();
   };
@@ -95,7 +96,7 @@ export default function AdminSiswa() {
     siswaState.fetchKelas();
   }, []);
 
-  const handleChangePaginationSiswa = (event, value) => {
+  const handleChangePaginationSiswa = (event: React.ChangeEvent<unknown>, value: number) => {
     console.log("value", value)
     siswaState.fetchSiswa(value)
   };
@@ -211,13 +212,13 @@ export default function AdminSiswa() {
                 <TableCell align="center" component="th" scope="row">
                   <Button
                     onClick={() => {
-                      handleOpenEdit(
-                        item.id,
-                        item.nama,
-                        item.username,
-                        item.password,
-                        item.kelas_id
-                      );
+                      // handleOpenEdit(
+                      //   item.id,
+                      //   item.nama,
+                      //   item.username,
+                      //   item.password,
+                      //   item.kelas_id
+                      // );
                     }}
                     sx={{ float: "center", fontFamily: "Poppins" }}
                     variant="contained"
@@ -333,7 +334,7 @@ export default function AdminSiswa() {
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
                 value={kelas === null ? 999 : Number(kelas)}
-                onChange={(e) => setKelas(e.target.value)}
+                onChange={(e) => setKelas(e.target.value as number)}
               >
                 <MenuItem value={999} disabled>
                   Pilih Kelas
@@ -361,12 +362,12 @@ export default function AdminSiswa() {
               <Button
                 variant="contained"
                 onClick={() => {
-                  siswaState.sendCreateSiswa(
-                    nama,
-                    username,
-                    password,
-                    Number(kelas)
-                  );
+                  // siswaState.sendCreateSiswa(
+                  //   nama,
+                  //   username,
+                  //   password,
+                  //   Number(kelas)
+                  // );
                 }}
               >
                 Submit Data
@@ -464,7 +465,7 @@ export default function AdminSiswa() {
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
                 value={isNaN(editKelas) ? 999 : Number(editKelas)}
-                onChange={(e) => setEditKelas(e.target.value)}
+                onChange={(e) => setEditKelas(e.target.value as number)}
               >
                 <MenuItem value={999} disabled>
                   Pilih Kelas
@@ -496,13 +497,13 @@ export default function AdminSiswa() {
               <Button
                 variant="contained"
                 onClick={() => {
-                  siswaState.editSiswa(
-                    editId,
-                    editNama,
-                    editUsername,
-                    editPassword,
-                    Number(editKelas)
-                  );
+                  // siswaState.editSiswa(
+                  //   editId,
+                  //   editNama,
+                  //   editUsername,
+                  //   editPassword,
+                  //   Number(editKelas)
+                  // );
                 }}
               >
                 Update Data

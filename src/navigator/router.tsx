@@ -1,6 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
-import App from "../App";
-import Guru from "../pages/Guru";
+import App from "../App.jsx";
+import Guru from "../pages/Guru.jsx";
 import Absensi from "../pages/Absensi.jsx";
 import Mapel from "../pages/Mapel.jsx";
 import Users from "../pages/Users.jsx";
@@ -9,13 +9,12 @@ import Ujian from "../pages/Ujian.jsx";
 import SignUp from "../pages/SignUp.jsx";
 import Signin from "../pages/Signin.jsx";
 import ErrorNotFound from "../pages/ErrorNotFound.jsx";
-import axiosNew from "../components/AxiosConfig.jsx";
 import HasilUlangan from "../pages/HasilUlangan.jsx";
 import AppAdmin from "../AppAdmin.jsx";
 import AdminGuru from "../pages/Admin/AdminGuru.jsx";
 import AdminKelas from "../pages/Admin/AdminKelas.jsx";
-import AdminSiswa from "../pages/Admin/AdminSiswa.jsx";
 import AdminMapel from "../pages/Admin/AdminMapel.jsx";
+import AdminSiswa from "../pages/Admin/AdminSiswa.js";
 
 export const router = createBrowserRouter([
   {
