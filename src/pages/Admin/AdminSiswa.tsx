@@ -20,7 +20,6 @@ import { useAdminSiswa } from "../../store/admin/admin_siswa.store";
 import { ToastContainer } from "react-toastify";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
-import { SiswaData } from "../../models/siswa_dao";
 
 const boxStyle = {
   position: "absolute",
@@ -39,16 +38,16 @@ export default function AdminSiswa() {
   const siswaState = useAdminSiswa((state) => state);
 
   // State Create
-  const [nama, setNama] = useState("");
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [nama, setNama] = useState<string>("");
+  const [username, setUsername] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
   const [kelas, setKelas] = useState<number>(999);
 
   // State Edit
-  const [editId, setEditId] = useState(0);
-  const [editNama, setEditNama] = useState("");
-  const [editUsername, setEditUsername] = useState("");
-  const [editPassword, setEditPassword] = useState("");
+  const [editId, setEditId] = useState<number>(0);
+  const [editNama, setEditNama] = useState<string>("");
+  const [editUsername, setEditUsername] = useState<string>("");
+  const [editPassword, setEditPassword] = useState<string>("");
   const [editKelas, setEditKelas] = useState<number>(0);
 
   // State Delete
@@ -219,13 +218,13 @@ export default function AdminSiswa() {
                 <TableCell align="center" component="th" scope="row">
                   <Button
                     onClick={() => {
-                      // handleOpenEdit(
-                      //   item.id,
-                      //   item.nama,
-                      //   item.username,
-                      //   item.password,
-                      //   item.kelas_id
-                      // );
+                      handleOpenEdit(
+                        item.siswa_id,
+                        item.nama,
+                        item.username,
+                        item.password,
+                        item.kelas_id
+                      );
                     }}
                     sx={{ float: "center", fontFamily: "Poppins" }}
                     variant="contained"
@@ -374,12 +373,12 @@ export default function AdminSiswa() {
               <Button
                 variant="contained"
                 onClick={() => {
-                  // siswaState.sendCreateSiswa(
-                  //   nama,
-                  //   username,
-                  //   password,
-                  //   Number(kelas)
-                  // );
+                  siswaState.sendCreateSiswa(
+                    nama,
+                    username,
+                    password,
+                    Number(kelas)
+                  );
                 }}
               >
                 Submit Data
@@ -509,13 +508,13 @@ export default function AdminSiswa() {
               <Button
                 variant="contained"
                 onClick={() => {
-                  // siswaState.editSiswa(
-                  //   editId,
-                  //   editNama,
-                  //   editUsername,
-                  //   editPassword,
-                  //   Number(editKelas)
-                  // );
+                  siswaState.editSiswa(
+                    editId,
+                    editNama,
+                    editUsername,
+                    editPassword,
+                    Number(editKelas)
+                  );
                 }}
               >
                 Update Data

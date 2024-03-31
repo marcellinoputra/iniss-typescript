@@ -1,3 +1,4 @@
+// Siswa DAO
 export interface SiswaModels {
     status: number
     error: boolean
@@ -12,6 +13,8 @@ export interface SiswaData {
     siswa_id: number
     nama: string
     username: string
+    password: string
+    kelas_id: number
     status_user: number
     kelas: Kelas
 }
@@ -20,8 +23,7 @@ export interface Kelas {
     nomor_kelas: string
 }
 
-
-
+// Kelas DAO
 export interface KelasModels {
     status: number
     error: boolean

@@ -3,18 +3,11 @@ import axiosNew from "../../components/AxiosConfig";
 import { KelasData, SiswaData } from "../../models/siswa_dao";
 import { toast } from "react-toastify";
 
-interface SiswaDto {
-  nama: string;
-  username: string;
-  password: string;
-  kelas: number
-}
 
 let modelSiswa: SiswaData[] = [];
 let modelKelas: KelasData[] = [];
 
 export const useAdminSiswa = create((set: any, get: any) => ({
-
   siswa: modelSiswa,
   kelas: modelKelas,
   totalPageSiswa: 0,
@@ -44,27 +37,24 @@ export const useAdminSiswa = create((set: any, get: any) => ({
     set({ deleteModalTrigger: false });
   },
 
-
-
   fetchKelas: async () => {
     set({ kelas: [] });
     await axiosNew
-      .get("/kelas", {
+      .get("/kelas?limit=999", {
         headers: {
           "x-access-token": localStorage.getItem("token"),
         },
       })
       .then((res) => {
         if (res.status === 200) {
-          console.log(res.data)
-          set({ totalPageKelas: res.data.total_page })
+          // console.log(res.data);
+          set({ totalPageKelas: res.data.total_page });
           set({ kelas: res.data.data });
         }
       });
   },
 
   fetchSiswa: async (page: number) => {
-    console.log("Executed...")
     set({ siswa: [] });
     await axiosNew
       .get(`/admin/find-siswa?page=${page}`, {
@@ -74,21 +64,26 @@ export const useAdminSiswa = create((set: any, get: any) => ({
       })
       .then((res) => {
         if (res.status === 200) {
-          set({ totalPageSiswa: res.data.total_page })
+          set({ totalPageSiswa: res.data.total_page });
           set({ siswa: res.data.data });
         }
       });
   },
 
-  sendCreateSiswa: async (form: SiswaDto) => {
+  sendCreateSiswa: async (
+    nama: string,
+    username: string,
+    password: string,
+    kelas: number
+  ) => {
     await axiosNew
       .post(
         "/admin/create-siswa",
         {
-          nama: form.nama,
-          username: form.username,
-          password: form.password,
-          kelas_id: Number(form.kelas),
+          nama: nama,
+          username: username,
+          password: password,
+          kelas_id: Number(kelas),
         },
         {
           headers: {
@@ -108,15 +103,21 @@ export const useAdminSiswa = create((set: any, get: any) => ({
       });
   },
 
-  editSiswa: async (id: number, form: SiswaDto) => {
+  editSiswa: async (
+    id: number,
+    nama: string,
+    username: string,
+    password: string,
+    kelas: number
+  ) => {
     await axiosNew
       .put(
         `/admin/edit-siswa/${id}`,
         {
-          nama: form.nama,
-          username: form.username,
-          password: form.password,
-          kelas_id: Number(form.kelas),
+          nama: nama,
+          username: username,
+          password: password,
+          kelas_id: Number(kelas),
           status_user: 1,
         },
         {
@@ -139,14 +140,11 @@ export const useAdminSiswa = create((set: any, get: any) => ({
 
   deleteSiswa: async (id: number) => {
     await axiosNew
-      .delete(
-        `/admin/delete-siswa/${id}`,
-        {
-          headers: {
-            "x-access-token": localStorage.getItem("token"),
-          },
-        }
-      )
+      .delete(`/admin/delete-siswa/${id}`, {
+        headers: {
+          "x-access-token": localStorage.getItem("token"),
+        },
+      })
       .then((res) => {
         if (res.status === 200 || res.status === 201) {
           get().fetchSiswa();
@@ -157,5 +155,4 @@ export const useAdminSiswa = create((set: any, get: any) => ({
         toast.error(err.response.data.message ?? "Something Went Wrong");
       });
   },
-
 }));
