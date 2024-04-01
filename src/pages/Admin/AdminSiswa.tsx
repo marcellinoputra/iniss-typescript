@@ -33,7 +33,7 @@ const boxStyle = {
   p: 4,
 };
 
-export default function AdminSiswa() {
+const AdminSiswa: React.FC = () => {
   // Store
   const siswaState = useAdminSiswa((state) => state);
 
@@ -589,4 +589,6 @@ export default function AdminSiswa() {
       {/* End Modal Delete */}
     </>
   );
-}
+};
+
+export default AdminSiswa;

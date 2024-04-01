@@ -17,7 +17,7 @@ import {
 } from "@mui/material";
 import { ToastContainer } from "react-toastify";
 import { useKelasAdmin } from "../../store/admin/admin_kelas.store";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 
 const style = {
@@ -32,7 +32,7 @@ const style = {
   p: 4,
 };
 
-export default function AdminKelas() {
+const AdminKelas: React.FC = () => {
   // State Create
   const [handleGuru, setHandleGuru] = useState<number>(999);
   const [addNomorKelas, setAddNomorKelas] = useState<string>("");
@@ -525,4 +525,6 @@ export default function AdminKelas() {
       {/* End Modal Delete */}
     </>
   );
-}
+};
+
+export default AdminKelas;
