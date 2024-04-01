@@ -53,7 +53,6 @@ export const useAdminSiswa = create((set: any, get: any) => ({
       })
       .then((res) => {
         if (res.status === 200) {
-          console.log(res.data);
           set({ totalPageKelas: res.data.total_page });
           set({ kelas: res.data.data });
         }
@@ -61,7 +60,6 @@ export const useAdminSiswa = create((set: any, get: any) => ({
   },
 
   fetchSiswa: async (page: number) => {
-    console.log("Executed...");
     set({ siswa: [] });
     await axiosNew
       .get(`/admin/find-siswa?page=${page}`, {
@@ -90,12 +88,12 @@ export const useAdminSiswa = create((set: any, get: any) => ({
           nama: nama,
           username: username,
           password: password,
-          kelas_id: Number(kelas_id),
+          kelas_id: kelas_id,
         },
         {
           headers: {
-            "x-access-token": localStorage.getItem("token"),
             "Content-Type": "application/x-www-form-urlencoded",
+            "x-access-token": localStorage.getItem("token"),
           },
         }
       )

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -6,7 +6,6 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import axiosNew from "../../components/AxiosConfig";
 import {
   Button,
   FormControl,
@@ -17,8 +16,7 @@ import {
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import { ToastContainer, toast } from "react-toastify";
-import cryptoJS from "crypto-js";
+import { ToastContainer } from "react-toastify";
 import { JadwalModels } from "../../models/Jadwal_models";
 import { useAdminMapel } from "../../store/admin/admin_mapel.store";
 
@@ -35,95 +33,42 @@ const style = {
 };
 
 export default function AdminMapel() {
-  const [dataPelajaran, setDataPelajaran] = useState([]);
-  const [open, setOpen] = useState(false);
-  const handleClose = () => setOpen(false);
-  const handleOpen = () => setOpen(true);
+  const handleClose = () => {
+    setHandlerPelajaran("");
+    setHandlerGuru(0);
+    setHandlerKelas(0);
+    setHandlerJadwalId(0);
+    setHandlerWaktu("");
+    mapelState.onCloseAddModal();
+  };
 
   const [dataGuru, setDataGuru] = useState([]);
   const [dataKelas, setDataKelas] = useState([]);
 
-  const [handlePelajaran, setHandlerPelajaran] = useState();
-  const [handleGuru, setHandlerGuru] = useState();
-  const [handleKelas, setHandlerKelas] = useState();
-  const [handleJadwalId, setHandlerJadwalId] = useState();
-  const [handleWaktu, setHandlerWaktu] = useState();
+  const [handlePelajaran, setHandlerPelajaran] = useState<string>("");
+  const [handleGuru, setHandlerGuru] = useState<number>(0);
+  const [handleKelas, setHandlerKelas] = useState<number>(0);
+  const [handleJadwalId, setHandlerJadwalId] = useState<number>(0);
+  const [handleWaktu, setHandlerWaktu] = useState<string>("");
 
   //Zustand Store
   const mapelState = useAdminMapel((state) => state);
 
-  async function getMapel() {
-    setDataPelajaran([]);
-    await axiosNew.get(`/find-pelajaran?user_id=${1}`).then((res) => {
-      // console.log(res.data.data);
-      setDataPelajaran(res.data.data);
-      // console.log(dataPelajaran[0].nama);
-    });
-  }
-
   useEffect(() => {
-    mapelState.getMapel();
+    mapelState.getMapel(1);
   }, []);
 
   async function openModalApi() {
-    setOpen(true);
-    async function getGuruByRole() {
-      await axiosNew.get("/list-user-guru").then(function (res) {
-        setDataGuru(res.data.data);
-      });
-    }
-    async function getKelas() {
-      await axiosNew.get("/kelas").then(function (res) {
-        setDataKelas(res.data.data);
-      });
-    }
-
-    await getGuruByRole();
-    await getKelas();
-  }
-  const token = localStorage.getItem("token");
-
-  async function submitMapel() {
-    const decrypt = cryptoJS.AES.decrypt(
-      token,
-      `${import.meta.env.VITE_KEY_ENCRYPT}`
-    );
-    let date = new Date(2022, 3, 13);
-    await axiosNew
-      .post(
-        "/create-pelajaran",
-        {
-          nama: handlePelajaran,
-          guruId: handleGuru,
-          kelasId: handleKelas,
-          jadwalId: handleJadwalId,
-          jam: handleWaktu,
-          createdAt: new Date().toISOString(),
-        },
-        {
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-            "x-access-token": token,
-          },
-        }
-      )
-      .then((res) => {
-        if (res.status === 200 || res.status === 201) {
-          setOpen(false);
-          getMapel();
-        }
-      })
-      .catch((err) =>
-        toast.error(err.response.data.message ?? "Something went wrong")
-      );
+    mapelState.onOpenAddModal();
+    await mapelState.getGuruByRole();
+    await mapelState.getKelas();
   }
 
   return (
     <>
       <ToastContainer />
-
       <Button
-        onClick={openModalApi}
+        onClick={() => openModalApi()}
         style={{
           marginTop: "20px",
           marginBottom: "30px",
@@ -181,6 +126,7 @@ export default function AdminMapel() {
           </TableHead>
           <TableBody>
             {mapelState.mapel?.map((row, i) => {
+              console.log(row);
               return (
                 <TableRow
                   key={i}
@@ -201,7 +147,7 @@ export default function AdminMapel() {
       </TableContainer>
 
       <Modal
-        open={open}
+        open={mapelState.addModalTrigger}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
@@ -236,16 +182,19 @@ export default function AdminMapel() {
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
                 defaultValue={handleGuru ?? 999}
-                onChange={(e) => setHandlerGuru(e.target.value)}
+                onChange={(e) => setHandlerGuru(Number(e.target.value))}
               >
                 <MenuItem value={999} disabled>
                   Pilih Guru
                 </MenuItem>
-                {dataGuru.map((e) => (
-                  <MenuItem key={e.guru_id} value={e.guru_id}>
-                    {e.nama}
-                  </MenuItem>
-                ))}
+                {mapelState.dataGuru?.map((e) => {
+                  console.log(e);
+                  return (
+                    <MenuItem key={e.guru_id} value={e.guru_id}>
+                      {e.nama}
+                    </MenuItem>
+                  );
+                })}
               </Select>
             </FormControl>
             <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
@@ -256,16 +205,19 @@ export default function AdminMapel() {
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
                 defaultValue={handleKelas ?? 999}
-                onChange={(e) => setHandlerKelas(e.target.value)}
+                onChange={(e) => setHandlerKelas(Number(e.target.value))}
               >
                 <MenuItem value={999} disabled>
                   Pilih Kelas
                 </MenuItem>
-                {dataKelas.map((e) => (
-                  <MenuItem key={e.kelas_id} value={e.kelas_id}>
-                    Kelas {e.nomor_kelas}
-                  </MenuItem>
-                ))}
+                {mapelState.dataKelas?.map((e) => {
+                  console.log(e);
+                  return (
+                    <MenuItem key={e.kelas_id} value={e.kelas_id}>
+                      Kelas {e.nomor_kelas}
+                    </MenuItem>
+                  );
+                })}
               </Select>
             </FormControl>
             <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
@@ -276,7 +228,7 @@ export default function AdminMapel() {
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
                 defaultValue={999}
-                onChange={(e) => setHandlerJadwalId(e.target.value)}
+                onChange={(e) => setHandlerJadwalId(Number(e.target.value))}
               >
                 <MenuItem value={999} disabled>
                   Pilih Hari
@@ -309,11 +261,6 @@ export default function AdminMapel() {
                   Number(handleJadwalId),
                   handleWaktu
                 );
-                console.log(handlePelajaran);
-                console.log(handleGuru);
-                console.log(handleKelas);
-                console.log(handleJadwalId);
-                console.log(handleWaktu);
               }}
               variant="contained"
             >

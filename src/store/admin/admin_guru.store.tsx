@@ -12,7 +12,7 @@ interface AdminGuruDTO {
 
 let modelGuru: AdminGuruDTO[] = [];
 
-export const useAdminGuru = create((set: any) => ({
+export const useAdminGuru = create((set: any, get: any) => ({
   guru: modelGuru,
   isLoading: false,
   totalPageGuru: 0,

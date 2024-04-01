@@ -13,7 +13,7 @@ import HasilUlangan from "../pages/HasilUlangan.jsx";
 import AppAdmin from "../AppAdmin.jsx";
 import AdminGuru from "../pages/Admin/AdminGuru.js";
 import AdminKelas from "../pages/Admin/AdminKelas.jsx";
-import AdminMapel from "../pages/Admin/AdminMapel.jsx";
+import AdminMapel from "../pages/Admin/AdminMapel.js";
 import AdminSiswa from "../pages/Admin/AdminSiswa.js";
 
 export const router = createBrowserRouter([
