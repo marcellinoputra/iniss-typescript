@@ -3,6 +3,12 @@ import axiosNew from "../../components/AxiosConfig";
 import { KelasData, SiswaData } from "../../models/siswa_dao";
 import { toast } from "react-toastify";
 
+interface SiswaDto {
+  nama: string;
+  username: string;
+  password: string;
+  kelas: number;
+}
 
 let modelSiswa: SiswaData[] = [];
 let modelKelas: KelasData[] = [];
@@ -47,7 +53,7 @@ export const useAdminSiswa = create((set: any, get: any) => ({
       })
       .then((res) => {
         if (res.status === 200) {
-          // console.log(res.data);
+          console.log(res.data);
           set({ totalPageKelas: res.data.total_page });
           set({ kelas: res.data.data });
         }
@@ -55,6 +61,7 @@ export const useAdminSiswa = create((set: any, get: any) => ({
   },
 
   fetchSiswa: async (page: number) => {
+    console.log("Executed...");
     set({ siswa: [] });
     await axiosNew
       .get(`/admin/find-siswa?page=${page}`, {
@@ -74,7 +81,7 @@ export const useAdminSiswa = create((set: any, get: any) => ({
     nama: string,
     username: string,
     password: string,
-    kelas: number
+    kelas_id: number
   ) => {
     await axiosNew
       .post(
@@ -83,7 +90,7 @@ export const useAdminSiswa = create((set: any, get: any) => ({
           nama: nama,
           username: username,
           password: password,
-          kelas_id: Number(kelas),
+          kelas_id: Number(kelas_id),
         },
         {
           headers: {
