@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAdminGuru } from "../../store/admin/admin_guru.store";
 import {
   Box,
@@ -25,13 +25,6 @@ import {
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { ToastContainer } from "react-toastify";
 
-// const override = (React.CSSProperties = {
-//   transform: "translate(-50%, -50%)",
-//   top: "50%",
-//   left: "50%",
-//   position: "absolute",
-// });
-
 const style = {
   position: "absolute",
   top: "50%",
@@ -44,7 +37,7 @@ const style = {
   p: 4,
 };
 
-export default function AdminGuru() {
+const AdminGuru: React.FC = () => {
   //Use State For Input
   const [addNama, setAddNama] = useState<string>("");
   const [addUsername, setAddUsername] = useState<string>("");
@@ -592,4 +585,6 @@ export default function AdminGuru() {
       {/* End Modal For Delete Guru */}
     </>
   );
-}
+};
+
+export default AdminGuru;

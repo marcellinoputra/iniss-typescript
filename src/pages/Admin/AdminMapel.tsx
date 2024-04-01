@@ -32,7 +32,7 @@ const style = {
   p: 4,
 };
 
-export default function AdminMapel() {
+const AdminMapel: React.FC = () => {
   const handleClose = () => {
     setHandlerPelajaran("");
     setHandlerGuru(0);
@@ -41,9 +41,6 @@ export default function AdminMapel() {
     setHandlerWaktu("");
     mapelState.onCloseAddModal();
   };
-
-  const [dataGuru, setDataGuru] = useState([]);
-  const [dataKelas, setDataKelas] = useState([]);
 
   const [handlePelajaran, setHandlerPelajaran] = useState<string>("");
   const [handleGuru, setHandlerGuru] = useState<number>(0);
@@ -271,4 +268,6 @@ export default function AdminMapel() {
       </Modal>
     </>
   );
-}
+};
+
+export default AdminMapel;
