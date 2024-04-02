@@ -47,7 +47,7 @@ const AdminSiswa: React.FC = () => {
   const [editId, setEditId] = useState<number>(0);
   const [editNama, setEditNama] = useState<string>("");
   const [editUsername, setEditUsername] = useState<string>("");
-  const [editPassword, setEditPassword] = useState<string>("");
+  // const [editPassword, setEditPassword] = useState<string>("");
   const [editKelas, setEditKelas] = useState<number>(0);
 
   // State Delete
@@ -77,13 +77,13 @@ const AdminSiswa: React.FC = () => {
     id: number,
     nama: string,
     username: string,
-    password: string,
+    // password: string,
     kelas: number
   ) => {
     setEditId(id);
     setEditNama(nama);
     setEditUsername(username);
-    setEditPassword(password);
+    // setEditPassword(password);
     setEditKelas(kelas);
     // siswaState.editSiswa();
     siswaState.openEditModal();
@@ -222,8 +222,8 @@ const AdminSiswa: React.FC = () => {
                         item.siswa_id,
                         item.nama,
                         item.username,
-                        item.password,
-                        item.kelas_id
+                        // item.password,
+                        item.kelas_id,
                       );
                     }}
                     sx={{ float: "center", fontFamily: "Poppins" }}
@@ -249,6 +249,7 @@ const AdminSiswa: React.FC = () => {
         spacing={2}
         sx={{
           marginTop: 3,
+          alignItems: "center",
         }}
       >
         <Pagination
@@ -445,7 +446,7 @@ const AdminSiswa: React.FC = () => {
                 }}
               />
             </FormControl>
-            <FormControl
+            {/* <FormControl
               fullWidth
               style={{
                 marginTop: "20px",
@@ -462,7 +463,7 @@ const AdminSiswa: React.FC = () => {
                   setEditPassword(e.target.value.replace(/\s/g, ""));
                 }}
               />
-            </FormControl>
+            </FormControl> */}
             <FormControl
               fullWidth
               style={{
@@ -512,7 +513,7 @@ const AdminSiswa: React.FC = () => {
                     editId,
                     editNama,
                     editUsername,
-                    editPassword,
+                    // editPassword,
                     Number(editKelas)
                   );
                 }}

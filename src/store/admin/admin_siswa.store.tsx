@@ -88,7 +88,7 @@ export const useAdminSiswa = create((set: any, get: any) => ({
           nama: nama,
           username: username,
           password: password,
-          kelas_id: kelas_id,
+          kelasid: kelas_id,
         },
         {
           headers: {
@@ -112,7 +112,6 @@ export const useAdminSiswa = create((set: any, get: any) => ({
     id: number,
     nama: string,
     username: string,
-    password: string,
     kelas: number
   ) => {
     await axiosNew
@@ -121,7 +120,6 @@ export const useAdminSiswa = create((set: any, get: any) => ({
         {
           nama: nama,
           username: username,
-          password: password,
           kelas_id: Number(kelas),
           status_user: 1,
         },

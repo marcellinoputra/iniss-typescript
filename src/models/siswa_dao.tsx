@@ -6,6 +6,7 @@ export interface SiswaModels {
     total_page: number
     total_result: number
     limit: number
+    skip: number
     message: string
 }
 

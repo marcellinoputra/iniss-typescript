@@ -317,6 +317,7 @@ const AdminGuru: React.FC = () => {
         spacing={2}
         sx={{
           marginTop: 3,
+          alignItems: "center",
         }}
       >
         <Pagination
