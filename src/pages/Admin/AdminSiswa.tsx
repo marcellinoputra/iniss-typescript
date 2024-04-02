@@ -103,7 +103,6 @@ const AdminSiswa: React.FC = () => {
     event: React.ChangeEvent<unknown>,
     value: number
   ) => {
-    console.log("value", value);
     siswaState.fetchSiswa(value);
   };
 

@@ -4,8 +4,10 @@ import {
   FormControl,
   MenuItem,
   Modal,
+  Pagination,
   Paper,
   Select,
+  Stack,
   Table,
   TableBody,
   TableCell,
@@ -82,8 +84,15 @@ const AdminKelas: React.FC = () => {
     kelasStore.openDeleteModal();
   };
 
+  const handleChangePaginationKelas = (
+    event: React.ChangeEvent<unknown>,
+    value: number
+  ) => {
+    kelasStore.getDataKelas(value)
+  }
+
   useEffect(() => {
-    kelasStore.getDataKelas();
+    kelasStore.getDataKelas(1);
     kelasStore.getGuruForAdmin();
   }, []);
 
@@ -239,6 +248,19 @@ const AdminKelas: React.FC = () => {
           </TableBody>
         </Table>
       </TableContainer>
+      <Stack
+        spacing={2}
+        sx={{
+          marginTop: 3,
+          alignItems: "center",
+        }}
+      >
+        <Pagination 
+          count={kelasStore?.totalPageKelas}
+          color="primary"
+          onChange={handleChangePaginationKelas}
+        />
+      </Stack>
 
       {/* Modal Create */}
       <Modal

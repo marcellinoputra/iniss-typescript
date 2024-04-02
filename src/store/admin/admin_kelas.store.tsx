@@ -8,8 +8,10 @@ let modelKelas: KelasData[] = [];
 let modelGuru: GuruData[] = [];
 
 export const useKelasAdmin = create((set: any, get: any) => ({
+
   kelas: modelKelas,
   guru: modelGuru,
+  totalPageKelas: 0,
   isLoading: false,
   addModalTrigger: false,
   editModalTrigger: false,
@@ -36,11 +38,11 @@ export const useKelasAdmin = create((set: any, get: any) => ({
     set({ deleteModalTrigger: false });
   },
 
-  getDataKelas: async () => {
+  getDataKelas: async (page: number) => {
     set({ isLoading: true });
     set({ kelas: [] });
     await axiosNew
-      .get(`/kelas`, {
+      .get(`/kelas?page=${page}`, {
         headers: {
           "x-access-token": localStorage.getItem("token"),
         },
@@ -49,13 +51,14 @@ export const useKelasAdmin = create((set: any, get: any) => ({
         if (res.status === 200) {
           set({ isLoading: false });
           set({ kelas: res.data.data });
+          set({ totalPageKelas: res.data.total_page })
         }
       });
   },
 
   getGuruForAdmin: async () => {
     await axiosNew
-      .get("/list-user-guru", {
+      .get("/list-user-guru?limit=999", {
         headers: {
           "x-access-token": localStorage.getItem("token"),
         },
