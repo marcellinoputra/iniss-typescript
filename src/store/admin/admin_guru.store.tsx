@@ -60,12 +60,12 @@ export const useAdminGuru = create((set: any, get: any) => ({
       })
       .then((res) => {
         if (res.status === 200) {
-          set({ guru: res.data.data });
           set({ totalPageGuru: res.data.total_page });
-          set({ isLoading: false });
+          set({ guru: res.data.data });
         }
       });
   },
+
   createGuru: async (
     nama: string,
     username: string,
@@ -90,13 +90,15 @@ export const useAdminGuru = create((set: any, get: any) => ({
       )
       .then((res) => {
         if (res.status === 200 || res.status === 201) {
-          window.location.reload();
+          get().getGuru(1);
+          get().onCloseAddModal();
         }
       })
       .catch((err) => {
         toast.error(err.response.data.message ?? "Something Went Wrong");
       });
   },
+
   updateGuru: async (
     id: number,
     nama: string,
@@ -120,13 +122,15 @@ export const useAdminGuru = create((set: any, get: any) => ({
       )
       .then((res) => {
         if (res.status === 200 || res.status === 201) {
-          window.location.reload();
+          get().getGuru(1);
+          get().onCloseEditModal();
         }
       })
       .catch((err) => {
         toast.error(err.response.data.message ?? "Something Went Wrong");
       });
   },
+
   deleteGuru: async (id: number) => {
     await axiosNew
       .delete(`/admin/delete-guru/${id}`, {
@@ -136,7 +140,8 @@ export const useAdminGuru = create((set: any, get: any) => ({
       })
       .then((res) => {
         if (res.status === 200) {
-          window.location.reload();
+          get().getGuru(1);
+          get().onCloseDeleteModal();
         }
       })
       .catch((err) => {
