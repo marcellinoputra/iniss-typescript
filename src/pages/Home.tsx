@@ -1,32 +1,28 @@
 import React, { useEffect, useState } from "react";
 import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
-import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import { Stack } from "@mui/material";
-import { Diversity3TwoTone, Person } from "@mui/icons-material";
-import axios from "axios";
+import { Diversity3TwoTone } from "@mui/icons-material";
 import axiosNew from "../components/AxiosConfig";
 import cryptoJS from "crypto-js";
 
 export default function Home() {
+  
   const [murid, setMurid] = useState([]);
   const [guru, setGuru] = useState([]);
 
-  const token = localStorage.getItem("token");
+  // const token = localStorage.getItem("token");
 
   useEffect(() => {
     function getDataUser() {
-      const decrypt = cryptoJS.AES.decrypt(
-        token,
-        `${import.meta.env.VITE_KEY_ENCRYPT}`
-      );
+      // const decrypt = cryptoJS.AES.decrypt(
+      //   token || "{}",
+      //   `${import.meta.env.VITE_KEY_ENCRYPT}`
+      // );
       axiosNew
         .get("/list-users", {
           headers: {
-            "x-access-token": token,
+            "x-access-token": localStorage.getItem("token"),
             "ngrok-skip-browser-warning": "any",
           },
         })

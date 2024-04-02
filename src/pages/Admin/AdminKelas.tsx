@@ -123,15 +123,6 @@ const AdminKelas: React.FC = () => {
                   fontFamily: "Poppins",
                 }}
               >
-                No
-              </TableCell>
-              <TableCell
-                align="center"
-                style={{
-                  fontWeight: "bold",
-                  fontFamily: "Poppins",
-                }}
-              >
                 Kelas ID
               </TableCell>
               <TableCell
@@ -182,17 +173,12 @@ const AdminKelas: React.FC = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {kelasStore.kelas?.map((data, i) => {
+            {kelasStore.kelas?.map((data) => {
               return (
                 <TableRow
-                  key={i}
+                  key={data.kelas_id}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
-                  <TableCell align="center" component="th" scope="row">
-                    <Typography sx={{ fontFamily: "Poppins" }}>
-                      {i + 1}
-                    </Typography>
-                  </TableCell>
 
                   <TableCell align="center" component="th" scope="row">
                     <Typography sx={{ fontFamily: "Poppins" }}>

@@ -93,7 +93,7 @@ export const useKelasAdmin = create((set: any, get: any) => ({
       )
       .then((res) => {
         if (res.status === 200 || res.status === 201) {
-          get().getDataKelas();
+          get().getDataKelas(1);
           get().closeAddModal();
         }
       })
@@ -126,7 +126,7 @@ export const useKelasAdmin = create((set: any, get: any) => ({
       )
       .then((res) => {
         if (res.status === 200 || res.status === 201) {
-          get().getDataKelas();
+          get().getDataKelas(1);
           get().closeEditModal();
         }
       })
@@ -144,7 +144,7 @@ export const useKelasAdmin = create((set: any, get: any) => ({
       })
       .then((res) => {
         if (res.status === 200) {
-          get().getDataKelas();
+          get().getDataKelas(1);
           get().closeDeleteModal();
         }
       })

@@ -185,9 +185,9 @@ const AdminSiswa: React.FC = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {siswaState.siswa?.map((item, i) => (
+            {siswaState.siswa?.map((item) => (
               <TableRow
-                key={i}
+                key={item.siswa_id}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell align="center" component="th" scope="row">

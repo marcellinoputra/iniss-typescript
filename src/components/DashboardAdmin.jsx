@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -11,8 +11,6 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { useNavigate } from "react-router-dom";
 import Home from "../pages/Home";
-import Mapel from "../pages/Mapel";
-import axiosNew from "./AxiosConfig";
 import {
   AccountBox,
   Book,
@@ -20,18 +18,16 @@ import {
   Event,
   House,
 } from "@mui/icons-material";
-import Users from "../pages/Users";
-import Nilai from "../pages/Nilai";
 import { useLocation } from "react-router-dom";
 import Profile from "./Profile";
 import Ujian from "../pages/Ujian";
-import AdminGuru from "../pages/Admin/AdminGuru";
 import {
   useChangeNavbarAdmin,
   useMenuAdmin,
   useToggleSidebarAdmin,
 } from "../store/admin/admin_home.store";
-import { useRefresh, useToken } from "../store/global_store";
+import { useRefresh } from "../store/global_store";
+import AdminGuru from "../pages/Admin/AdminGuru";
 import AdminKelas from "../pages/Admin/AdminKelas";
 import AdminSiswa from "../pages/Admin/AdminSiswa";
 import AdminMapel from "../pages/Admin/AdminMapel";

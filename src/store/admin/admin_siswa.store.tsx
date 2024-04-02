@@ -3,12 +3,6 @@ import axiosNew from "../../components/AxiosConfig";
 import { KelasData, SiswaData } from "../../models/siswa_dao";
 import { toast } from "react-toastify";
 
-interface SiswaDto {
-  nama: string;
-  username: string;
-  password: string;
-  kelas: number;
-}
 
 let modelSiswa: SiswaData[] = [];
 let modelKelas: KelasData[] = [];
@@ -99,7 +93,7 @@ export const useAdminSiswa = create((set: any, get: any) => ({
       )
       .then((res) => {
         if (res.status === 200 || res.status === 201) {
-          get().fetchSiswa();
+          get().fetchSiswa(1);
           get().onCloseModal();
         }
       })
@@ -132,7 +126,7 @@ export const useAdminSiswa = create((set: any, get: any) => ({
       )
       .then((res) => {
         if (res.status === 200 || res.status === 201) {
-          get().fetchSiswa();
+          get().fetchSiswa(1);
           get().closeEditModal();
         }
       })
@@ -150,7 +144,7 @@ export const useAdminSiswa = create((set: any, get: any) => ({
       })
       .then((res) => {
         if (res.status === 200 || res.status === 201) {
-          get().fetchSiswa();
+          get().fetchSiswa(1);
           get().closeDeleteModal();
         }
       })
