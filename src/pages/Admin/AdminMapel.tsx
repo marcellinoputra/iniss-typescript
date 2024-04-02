@@ -48,6 +48,12 @@ const AdminMapel: React.FC = () => {
   const [handleJadwalId, setHandlerJadwalId] = useState<number>(0);
   const [handleWaktu, setHandlerWaktu] = useState<string>("");
 
+  // const [editPelajaran, setEditPelajaran] = useState<string>("");
+  // const [editGuru, setEditGuru] = useState<number>(0);
+  // const [editKelas, setEditKelas] = useState<number>(0);
+  // const [editJadwal, setEditJadwal] = useState<number>(0);
+  // const [editWaktu, setEditWaktu] = useState<string>("");
+
   //Zustand Store
   const mapelState = useAdminMapel((state) => state);
 
@@ -119,6 +125,22 @@ const AdminMapel: React.FC = () => {
               >
                 Waktu
               </TableCell>
+              <TableCell
+                align="center"
+                style={{
+                  fontWeight: "bold",
+                }}
+              >
+                Edit
+              </TableCell>
+              <TableCell
+                align="center"
+                style={{
+                  fontWeight: "bold",
+                }}
+              >
+                Hapus
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -136,6 +158,26 @@ const AdminMapel: React.FC = () => {
                   <TableCell align="center">{row.users.nama}</TableCell>
                   <TableCell align="center">{row.kelas.kelas_id}</TableCell>
                   <TableCell align="center">{row.jam}</TableCell>
+                  <TableCell align="center" component="th" scope="row">
+                    <Button
+                      onClick={() => {
+                        console.log("Di Click");
+                      }}
+                      variant="contained"
+                    >
+                      Edit
+                    </Button>
+                  </TableCell>
+                  <TableCell align="center" component="th" scope="row">
+                    <Button
+                      onClick={() => {
+                        console.log("Di Click");
+                      }}
+                      variant="contained"
+                    >
+                      Hapus
+                    </Button>
+                  </TableCell>
                 </TableRow>
               );
             })}
@@ -185,7 +227,6 @@ const AdminMapel: React.FC = () => {
                   Pilih Guru
                 </MenuItem>
                 {mapelState.dataGuru?.map((e) => {
-                  console.log(e);
                   return (
                     <MenuItem key={e.guru_id} value={e.guru_id}>
                       {e.nama}
@@ -208,7 +249,6 @@ const AdminMapel: React.FC = () => {
                   Pilih Kelas
                 </MenuItem>
                 {mapelState.dataKelas?.map((e) => {
-                  console.log(e);
                   return (
                     <MenuItem key={e.kelas_id} value={e.kelas_id}>
                       Kelas {e.nomor_kelas}
