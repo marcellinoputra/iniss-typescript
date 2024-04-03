@@ -1,80 +1,37 @@
-import React, { useState, useEffect } from 'react';
-import { router } from '../navigator/router';
-import axiosNew from '../components/AxiosConfig';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-
+import React, { useState, useEffect } from "react";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useAuth } from "../store/auth.store";
 
 export default function SignIn() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [rememberUsername, setRememberUsername] = useState(false);
-  const [role, setRole] = useState("guru")
+  const [role, setRole] = useState("guru");
+
+  const authStore = useAuth((state) => state);
 
   useEffect(() => {
-    const savedUsername = localStorage.getItem('rememberedUsername');
+    const savedUsername = localStorage.getItem("rememberedUsername");
     if (savedUsername) {
       setUsername(savedUsername);
       setRememberUsername(true);
     }
   }, []);
 
-  const handleKeyPress = (event) => {
-    if (event.key === 'Enter') {
-      handleSubmit(event);
-    }
-  };
-
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: React.ChangeEvent<unknown>) => {
     event.preventDefault();
     if (rememberUsername) {
-      localStorage.setItem('rememberedUsername', username);
+      localStorage.setItem("rememberedUsername", username);
     } else {
-      localStorage.removeItem('rememberedUsername');
+      localStorage.removeItem("rememberedUsername");
     }
 
     if (role === "guru") {
-      await axiosNew.post("/guru/sign-in", {
-        username: username,
-        password: password,
-      }, {
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded", 'ngrok-skip-browser-warning': 'any',
-        }
-      }).then(res => {
-        if (res.status === 200) {
-          localStorage.setItem("token", res.data.token)
-          localStorage.setItem("role_id", res.data.id)
-          localStorage.setItem("role", "guru")
-          router.navigate("/", { replace: true })
-        }
-      }).catch((err) => {
-        // console.log(err)
-        toast.error(err.response.data.message)
-      })
+      authStore.signInGuru(username, password);
     } else if (role === "admin") {
-      await axiosNew.post("/admin/sign-in", {
-        username: username,
-        password: password,
-      }, {
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded", 'ngrok-skip-browser-warning': 'any',
-        }
-      }).then(res => {
-        console.log(res.data)
-        if (res.status === 200) {
-          localStorage.setItem("token", res.data.token)
-          localStorage.setItem("role_id", res.data.id)
-          localStorage.setItem("role", "admin")
-          router.navigate("/admin", { replace: true })
-        }
-      }).catch((err) => {
-        // console.log(err)
-        toast.error(err.response.data.message)
-      })
+      authStore.signInAdmin(username, password);
     }
-
-
   };
 
   return (
@@ -82,10 +39,14 @@ export default function SignIn() {
       <ToastContainer />
 
       <div className="p-6 max-w-sm w-full bg-white shadow-md rounded-md">
-        <h2 className="text-2xl font-bold text-center text-gray-700 mb-4">Masuk Dashboard</h2>
+        <h2 className="text-2xl font-bold text-center text-gray-700 mb-4">
+          Masuk Dashboard
+        </h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label htmlFor="email" className="block text-sm text-gray-700">Username</label>
+            <label htmlFor="email" className="block text-sm text-gray-700">
+              Username
+            </label>
             <input
               type="text"
               id="username"
@@ -99,7 +60,9 @@ export default function SignIn() {
           </div>
 
           <div className="mb-3">
-            <label htmlFor="password" className="block text-sm text-gray-700">Password</label>
+            <label htmlFor="password" className="block text-sm text-gray-700">
+              Password
+            </label>
             <input
               type="password"
               id="password"
