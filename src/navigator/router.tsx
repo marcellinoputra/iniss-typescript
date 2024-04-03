@@ -8,7 +8,7 @@ import Nilai from "../pages/Nilai.jsx";
 import Ujian from "../pages/Ujian.jsx";
 import SignUp from "../pages/SignUp.jsx";
 import Signin from "../pages/Signin.jsx";
-import ErrorNotFound from "../pages/ErrorNotFound.jsx";
+import ErrorNotFound from "../pages/ErrorNotFound.js";
 import HasilUlangan from "../pages/HasilUlangan.jsx";
 import AppAdmin from "../AppAdmin.jsx";
 import AdminGuru from "../pages/Admin/AdminGuru.js";
