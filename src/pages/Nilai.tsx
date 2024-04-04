@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from "react";
 import {
   Box,
   Table,
@@ -16,19 +16,8 @@ import {
   InputLabel,
   Select,
   MenuItem,
-  Chip,
-  InputAdornment,
 } from "@mui/material";
-import axiosNew from "../components/AxiosConfig";
-import cryptoJS from "crypto-js";
-
-
-const override = (React.CSSProperties = {
-  transform: "translate(-50%, -50%)",
-  top: "50%",
-  left: "50%",
-  position: "absolute",
-});
+import { useNilai } from "../store/nilai.store";
 
 const style = {
   position: "absolute",
@@ -42,111 +31,33 @@ const style = {
   p: 4,
 };
 
+const Nilai: React.FC = () => {
+  const [handleUts, setHandleUts] = useState<string>("");
+  const [handleUas, setHandleUas] = useState<string>("");
+  const [handleKelasId, setHandleKelasId] = useState<number>(0);
+  const [handleSemester, setHandleSemester] = useState<string>("");
+  const [handlePelajaranId, setHandlePelajaranId] = useState<number>(0);
+  const [handleUser, setHandlerUser] = useState<number>(0);
 
-export default function Nilai() {
-  const [nilai, setDataNilai] = useState([])
-  const [handleUts, setHandleUts] = useState()
-  const [handleUas, setHandleUas] = useState()
-  const [handleKelasId, setHandleKelasId] = useState()
-  const [handleSemester, setHandleSemester] = useState()
-  const [handlePelajaranId, setHandlePelajaranId] = useState()
-  const [handleUser, setHandlerUser] = useState()
-  // Loop
-  const [dataKelas, setDataKelas] = useState([])
-  const [dataUser, setDataUser] = useState([])
-  const [dataPelajaran, setDataPelajaran] = useState([])
-
-
-  //Trigger
-  const token = localStorage.getItem("token");
+  //Store Zustand
+  const nilaiStore = useNilai((state) => state);
 
   const [openManual, setOpenManual] = useState(false);
   const handleCloseManual = () => setOpenManual(false);
 
   async function handleOpen() {
-    const decrypt = cryptoJS.AES.decrypt(
-      token,
-      `${import.meta.env.VITE_KEY_ENCRYPT}`
-    );
-    setOpenManual(true);
-    await axiosNew.get("/kelas", {
-      headers: {
-        "x-access-token": token
-      },
-    }).then(function (res) {
-      setDataKelas(res.data.data);
-    });
-    await axiosNew.get("/list-users", {
-      headers: {
-        "x-access-token": token
-      },
-    }).then(function (res) {
-      setDataUser(res.data.data);
-    });
-    await axiosNew.get("/find-pelajaran", {
-      headers: {
-        "x-access-token": token
-      },
-    }).then(function (res) {
-      setDataPelajaran(res.data.data);
-    });
-  }
-
-  async function handleSubmitNilai() {
-    const dataForm = {
-      uts: handleUts,
-      uas: handleUas,
-      kelas_id: handleKelasId,
-      semester: handleSemester,
-      pelajaran_id: handlePelajaranId,
-      user_id: handleUser,
-    }
-
-    // console.log(dataForm)
-    await axiosNew.post("/create-nilai", {
-      uts: handleUts,
-      uas: handleUas,
-      kelas_id: handleKelasId,
-      semester: handleSemester,
-      pelajaran_id: handlePelajaranId,
-      user_id: handleUser,
-    }, {
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      }
-    }).then(function (res) {
-      if (res.status === 200) {
-        handleCloseManual();
-        async function getNilai() {
-          await axiosNew.get("/nilai-all").then((res) => {
-            //  // console.log(res.data)
-            if (res.status === 200) {
-              setDataNilai(res.data.data)
-            }
-          })
-        }
-        getNilai();
-      } else {
-      }
-    })
-
+    nilaiStore.onOpenAddModal();
+    await nilaiStore.getDataKelas();
+    await nilaiStore.getDataPelajaran();
+    await nilaiStore.getDataUser();
   }
 
   useEffect(() => {
-    async function getNilai() {
-      await axiosNew.get("/nilai-all").then((res) => {
-        // console.log(res.data)
-        if (res.status === 200) {
-          setDataNilai(res.data.data)
-        }
-      })
-    }
-    getNilai();
-  }, [])
+    nilaiStore.getNilai();
+  }, []);
 
   return (
     <>
-
       <div className="filter_style">
         <Button
           className="btn_absen"
@@ -164,28 +75,58 @@ export default function Nilai() {
           <TableHead>
             <TableRow>
               <TableCell>No</TableCell>
-              <TableCell align="left" style={{
-                fontWeight: "bold"
-              }}>Nama Siswa/i</TableCell>
-              <TableCell align="left" style={{
-                fontWeight: "bold"
-              }}>Nomor Kelas</TableCell>
-              <TableCell align="left" style={{
-                fontWeight: "bold"
-              }}>Nilai UTS</TableCell>
-              <TableCell align="left" style={{
-                fontWeight: "bold"
-              }}>Nilai UAS</TableCell>
-              <TableCell align="left" style={{
-                fontWeight: "bold"
-              }}>Semester</TableCell>
-              <TableCell align="left" style={{
-                fontWeight: "bold"
-              }}>Mapel</TableCell>
+              <TableCell
+                align="left"
+                style={{
+                  fontWeight: "bold",
+                }}
+              >
+                Nama Siswa/i
+              </TableCell>
+              <TableCell
+                align="left"
+                style={{
+                  fontWeight: "bold",
+                }}
+              >
+                Nomor Kelas
+              </TableCell>
+              <TableCell
+                align="left"
+                style={{
+                  fontWeight: "bold",
+                }}
+              >
+                Nilai UTS
+              </TableCell>
+              <TableCell
+                align="left"
+                style={{
+                  fontWeight: "bold",
+                }}
+              >
+                Nilai UAS
+              </TableCell>
+              <TableCell
+                align="left"
+                style={{
+                  fontWeight: "bold",
+                }}
+              >
+                Semester
+              </TableCell>
+              <TableCell
+                align="left"
+                style={{
+                  fontWeight: "bold",
+                }}
+              >
+                Mapel
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {nilai.map((row, i) => (
+            {nilaiStore.nilai?.map((row, i) => (
               <TableRow
                 key={i}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -199,7 +140,6 @@ export default function Nilai() {
                 <TableCell align="left">{row.uas}</TableCell>
                 <TableCell align="left">{row.semester}</TableCell>
                 <TableCell align="left">{row.nama_pelajaran}</TableCell>
-
               </TableRow>
             ))}
 
@@ -233,9 +173,11 @@ export default function Nilai() {
                       id="demo-simple-select"
                       label="Mata Pelajaran"
                       value={handlePelajaranId}
-                      onChange={(e) => setHandlePelajaranId(e.target.value)}
+                      onChange={(e) =>
+                        setHandlePelajaranId(Number(e.target.value))
+                      }
                     >
-                      {dataPelajaran.map((e) => (
+                      {nilaiStore.dataPelajaran?.map((e) => (
                         <MenuItem key={e.id} value={e.id}>
                           {e.nama}
                         </MenuItem>
@@ -254,9 +196,9 @@ export default function Nilai() {
                       id="demo-simple-select"
                       label="Nomor Kelas"
                       value={handleKelasId}
-                      onChange={(e) => setHandleKelasId(e.target.value)}
+                      onChange={(e) => setHandleKelasId(Number(e.target.value))}
                     >
-                      {dataKelas.map((e) => (
+                      {nilaiStore.dataKelas?.map((e) => (
                         <MenuItem key={e.id} value={e.nomor}>
                           Nomor Kelas : {e.nomor}
                         </MenuItem>
@@ -275,9 +217,9 @@ export default function Nilai() {
                       id="demo-simple-select"
                       label="Nomor Kelas"
                       value={handleUser}
-                      onChange={(e) => setHandlerUser(e.target.value)}
+                      onChange={(e) => setHandlerUser(Number(e.target.value))}
                     >
-                      {dataUser.map((e) => (
+                      {nilaiStore.dataUser?.map((e) => (
                         <MenuItem key={e.id} value={e.id}>
                           {e.nama}
                         </MenuItem>
@@ -318,7 +260,16 @@ export default function Nilai() {
                     style={{
                       marginTop: 30,
                     }}
-                    onClick={handleSubmitNilai}
+                    onClick={() =>
+                      nilaiStore.handleSubmitNilai(
+                        handleUts,
+                        handleUas,
+                        handleKelasId,
+                        handleSemester,
+                        handlePelajaranId,
+                        handleUser
+                      )
+                    }
                     variant="contained"
                   >
                     Submit
@@ -329,8 +280,8 @@ export default function Nilai() {
           </TableBody>
         </Table>
       </TableContainer>
-
     </>
-  )
+  );
+};
 
-}
+export default Nilai;

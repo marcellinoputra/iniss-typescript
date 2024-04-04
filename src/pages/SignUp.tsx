@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { router } from "../navigator/router";
-import axiosNew from "../components/AxiosConfig";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 
 import "react-toastify/dist/ReactToastify.css";
 import { useAuth } from "../store/auth.store";
