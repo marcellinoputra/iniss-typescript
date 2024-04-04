@@ -145,8 +145,8 @@ const Nilai: React.FC = () => {
 
             {/* Manual Absen */}
             <Modal
-              open={openManual}
-              onClose={handleCloseManual}
+              open={nilaiStore.addModalTrigger}
+              onClose={() => nilaiStore.onCloseAddModal()}
               aria-labelledby="modal-modal-title"
               aria-describedby="modal-modal-description"
             >
