@@ -33,9 +33,8 @@ import { formatDate } from "../helper/DateConverter";
 
 export default function Ujian() {
   // Store
-  const kelasDatas = useKelas((state) => state.kelas)
-  const fetchKelasData = useKelas((state) => state.fetchKelas)
-
+  const kelasDatas = useKelas((state) => state.kelas);
+  const fetchKelasData = useKelas((state) => state.fetchKelas);
 
   // Media Query
   const isDesktopOrLaptop = useMediaQuery({
@@ -43,65 +42,64 @@ export default function Ujian() {
   });
   const isTabletOrMobile = useMediaQuery({ query: "(max-width: 880px)" });
 
-
   // State buat Create
   const [showModal, setShowModal] = useState(false);
-  const [typeUjian, setTypeUjian] = useState();
-  const [durasi, setDurasi] = useState();
-  const [jamMulai, setJamMulai] = useState();
-  const [questions, setQuestions] = useState([]);
+  const [typeUjian, setTypeUjian] = useState("");
+  const [durasi, setDurasi] = useState<number>(0);
+  const [jamMulai, setJamMulai] = useState<number>(999);
+  const [questions, setQuestions] = useState<any[]>([]);
   const [addEssay, setAddEssay] = useState(false);
-  const [essay, setEssay] = useState([]);
+  const [essay, setEssay] = useState<any[]>([]);
   const [showEssayRecreate, setShowEssayRecreate] = useState(false);
   const [tanggal, setTanggal] = useState(new Date().toISOString());
-  const [dataUjian, setDataUjian] = useState([]);
-  const [answerUser, setAnswerUser] = useState([]);
-  const [dataPelajaran, setDataPelajaran] = useState([]);
-  const [selectedPelajaran, setSelectedPelajaran] = useState();
+  const [dataUjian, setDataUjian] = useState<any[]>([]);
+  const [answerUser, setAnswerUser] = useState<any[]>([]);
+  const [dataPelajaran, setDataPelajaran] = useState<any[]>([]);
+  const [selectedPelajaran, setSelectedPelajaran] = useState<number>(999);
   const tableRef = useRef(null);
-
-
 
   // State buat Edit
   const [keterangan, setKeterangan] = useState("");
-  const [editKeterangan, setEditKeterangan] = useState("")
+  const [editKeterangan, setEditKeterangan] = useState("");
   const [semester, setSemester] = useState(0);
-  const [editSemester, setEditSemester] = useState(0);
+  const [editSemester, setEditSemester] = useState<number>(0);
   const [showModalEdit, setShowModalEdit] = useState(false);
-  const [editTypeUjian, setEditTypeUjian] = useState();
-  const [editDurasi, setEditDurasi] = useState();
-  const [editJamMulai, setEditJamMulai] = useState();
-  const [editQuestions, setEditQuestions] = useState([]);
+  const [editTypeUjian, setEditTypeUjian] = useState("");
+  const [editDurasi, setEditDurasi] = useState<number>(999);
+  const [editJamMulai, setEditJamMulai] = useState<number>(999);
+  const [editQuestions, setEditQuestions] = useState<any[]>([]);
   const [editAddEssay, setEditAddEssay] = useState(false);
-  const [editEssay, setEditEssay] = useState([]);
+  const [editEssay, setEditEssay] = useState<any[]>([]);
   const [editDataUjian, setEditDataUjian] = useState([]);
-  const [editTanggal, setEditTanggal] = useState();
-  const [editSelectedPelajaran, setEditSelectedPelajaran] = useState();
+  const [editTanggal, setEditTanggal] = useState(new Date().toISOString());
+  const [editSelectedPelajaran, setEditSelectedPelajaran] = useState<number>(999);
   const [isEdit, setIsEdit] = useState(false);
   const [editId, setEditId] = useState();
   const [editDataKelas, setEditDataKelas] = useState([]);
-  const [editHandleKelas, setEditHandlerKelas] = useState();
+  const [editHandleKelas, setEditHandlerKelas] = useState<number>(999);
 
-
-
-
-  const [dataKelas, setDataKelas] = useState([]);
-  const [handleKelas, setHandlerKelas] = useState();
-
+  const [dataKelas, setDataKelas] = useState<any[]>([]);
+  const [handleKelas, setHandlerKelas] = useState<number>(999);
 
   const [hideModalTrigger, setHideModalTrigger] = useState(false);
   const [modalRecreate, setModalRecreate] = useState(false);
   const [param, setParam] = useState("");
 
   // filter
-  const [filterKelas, setFilterKelas] = useState();
+  const [filterKelas, setFilterKelas] = useState(999);
   const [filterTipeUjian, setFilterTipeUjian] = useState("Semua");
 
-  async function getEditUjian(id) {
+  async function getEditUjian(id: number) {
     await axiosNew.get(`/ujian-detail/${id}`).then((res) => {
       setEditDataUjian(res.data);
-      setEditQuestions(res.data.soal) ?? [];
-      setEditEssay(res.data.essay) ?? [];
+      if (res.data.soal !== undefined) {
+        setEditQuestions(res.data.soal);
+      }
+      // setEditQuestions(res.data.soal) ?? [];
+      if (res.data.essay !== undefined) {
+        setEditEssay(res.data.essay);
+      }
+      // setEditEssay(res.data.essay) ?? [];
     });
   }
 
@@ -142,7 +140,7 @@ export default function Ujian() {
           setHideModalTrigger(false);
         })
         .catch((err) => {
-          // console.log(`Err when load ujian: ${err} `);
+          toast.error(err.response.data.message ?? "Something Went Wrong");
         });
     } else if (
       localStorage.getItem("role_id") !== undefined ||
@@ -151,9 +149,9 @@ export default function Ujian() {
       await axiosNew
         .get(
           "/all-ujian?guru_id=" +
-          localStorage.getItem("role_id") +
-          "&nama_ujian=" +
-          filterTipeUjian,
+            localStorage.getItem("role_id") +
+            "&nama_ujian=" +
+            filterTipeUjian,
           {}
         )
         .then((res) => {
@@ -161,7 +159,7 @@ export default function Ujian() {
           setHideModalTrigger(false);
         })
         .catch((err) => {
-          // console.log(`Err when load ujian: ${err} `);
+          toast.error(err.response.data.message ?? "Something Went Wrong");
         });
     }
   }
@@ -180,48 +178,43 @@ export default function Ujian() {
           setDataPelajaran(res.data.data);
         })
         .catch((err) => {
-          // console.log(`Err when load pelajaran: ${err} `);
+          toast.error(err.response.data.message ?? "Something Went Wrong");
         });
     }
   }
 
-  const handleFileChange = (file, qIndex, cIndex) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    // console.log(`Reader Result -> ${reader.result}`);
-    reader.onloadend = () => {
-      const updatedQuestions = [...questions];
-      updatedQuestions[qIndex].pilihan[cIndex]["isi_pilihan[" + cIndex + "]"] =
-        reader.result;
-      setQuestions(updatedQuestions);
-    };
-  };
+  // const handleFileChange = (file: any, qIndex: number, cIndex: number) => {
+  //   const reader = new FileReader();
+  //   reader.readAsDataURL(file);
+  //   // console.log(`Reader Result -> ${reader.result}`);
+  //   reader.onloadend = () => {
+  //     const updatedQuestions = [...questions];
+  //     updatedQuestions[qIndex].pilihan[cIndex]["isi_pilihan[" + cIndex + "]"] =
+  //       reader.result;
+  //     setQuestions(updatedQuestions);
+  //   };
+  // };
 
-  const handleFileChangeEdit = (file, qIndex, cIndex) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    // console.log(`Reader Result -> ${reader.result}`);
-    reader.onloadend = () => {
-      const updatedQuestions = [...editQuestions];
+  // const handleFileChangeEdit = (file: any, qIndex: number, cIndex: number) => {
+  //   const reader = new FileReader();
+  //   reader.readAsDataURL(file);
+  //   // console.log(`Reader Result -> ${reader.result}`);
+  //   reader.onloadend = () => {
+  //     const updatedQuestions = [...editQuestions];
 
-      updatedQuestions[qIndex].pilihan[cIndex][1] = reader.result;
-      setQuestions(updatedQuestions);
-    };
-  };
+  //     updatedQuestions[qIndex].pilihan[cIndex][1] = reader.result;
+  //     setQuestions(updatedQuestions);
+  //   };
+  // };
 
-  async function onClickJawabanSiswa() {
-    setDataUjian([]);
-    await axiosNew.get("/all-exam", {}).then((res) => {
-      setAnswerUser(res.data.data);
-      setHideModalTrigger(true);
-      // console.log("Data Jawaban Siswa ->", res.data.data);
-    });
-  }
-
-
-
-
-
+  // async function onClickJawabanSiswa() {
+  //   setDataUjian([]);
+  //   await axiosNew.get("/all-exam", {}).then((res) => {
+  //     setAnswerUser(res.data.data);
+  //     setHideModalTrigger(true);
+  //     // console.log("Data Jawaban Siswa ->", res.data.data);
+  //   });
+  // }
 
   useEffect(() => {
     const savedQuestions = localStorage.getItem("questions");
@@ -240,7 +233,7 @@ export default function Ujian() {
     }
     getUjian();
     // fetchKelas();
-    fetchKelasData()
+    fetchKelasData();
 
     // console.log(`Kelas -> ${kelasDatas}`)
     getPelajaran();
@@ -330,7 +323,7 @@ export default function Ujian() {
       });
   }
 
-  async function editUjian(id) {
+  async function editUjian(id: number) {
     await axiosNew
       .put(
         `/edit-ujian/${id}`,
@@ -355,50 +348,50 @@ export default function Ujian() {
         toast.success("Berhasil Edit Ujian");
       })
       .catch((err) => {
-        console.error("Gagal Edit Ujian");
+        // console.error("Gagal Edit Ujian");
         toast.error("Gagal Edit Ujian");
       });
   }
 
-  async function recreateEditUjian() {
-    await axiosNew
-      .post(
-        `/create-ujian`,
-        {
-          nama_ujian: editTypeUjian,
-          mapel: editSelectedPelajaran,
-          jam: editJamMulai,
-          durasi: editDurasi,
-          total_soal: editQuestions.length + editEssay.length,
-          soal: editQuestions,
-          tanggal: new Date(editTanggal).toISOString(),
-          essay: editEssay,
-        },
-        {
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-        }
-      )
-      .then((res) => {
-        getUjian();
-        toast.success("Berhasil Buat Ulang Ujian");
-      })
-      .catch((err) => {
-        console.error("Gagal Edit Ujian");
-        toast.error("Gagal Buat Ulang Ujian");
-      });
-  }
+  // async function recreateEditUjian() {
+  //   await axiosNew
+  //     .post(
+  //       `/create-ujian`,
+  //       {
+  //         nama_ujian: editTypeUjian,
+  //         mapel: editSelectedPelajaran,
+  //         jam: editJamMulai,
+  //         durasi: editDurasi,
+  //         total_soal: editQuestions.length + editEssay.length,
+  //         soal: editQuestions,
+  //         tanggal: new Date(editTanggal).toISOString(),
+  //         essay: editEssay,
+  //       },
+  //       {
+  //         headers: {
+  //           "Content-Type": "application/x-www-form-urlencoded",
+  //         },
+  //       }
+  //     )
+  //     .then((res) => {
+  //       getUjian();
+  //       toast.success("Berhasil Buat Ulang Ujian");
+  //     })
+  //     .catch((err) => {
+  //       console.error("Gagal Edit Ujian");
+  //       toast.error("Gagal Buat Ulang Ujian");
+  //     });
+  // }
 
-  const [choiceInputType, setChoiceInputType] = useState({});
+  const [choiceInputType, setChoiceInputType] = useState<any>({});
 
-  const toggleChoiceInputType = (questionIndex, choiceIndex) => {
-    const newChoiceInputType = { ...choiceInputType };
-    const key = `${questionIndex}-${choiceIndex}`;
-    newChoiceInputType[key] =
-      newChoiceInputType[key] === "image" ? "text" : "image";
-    setChoiceInputType(newChoiceInputType);
-  };
+  // const toggleChoiceInputType = (questionIndex, choiceIndex) => {
+  //   const newChoiceInputType = { ...choiceInputType };
+  //   const key = `${questionIndex}-${choiceIndex}`;
+  //   newChoiceInputType[key] =
+  //     newChoiceInputType[key] === "image" ? "text" : "image";
+  //   setChoiceInputType(newChoiceInputType);
+  // };
 
   return (
     <>
@@ -450,14 +443,14 @@ export default function Ujian() {
               }}
               defaultValue={999}
               onChange={(e) => {
-                setFilterKelas(e.target.value);
+                setFilterKelas(e.target.value as number);
               }}
             >
               <MenuItem value={999} disabled>
                 Filter dari Kelas
               </MenuItem>
               {dataKelas.map((kelas, i) => (
-                <MenuItem key={i} value={kelas.kelas_id}>
+                <MenuItem key={i} value={Number(kelas.kelas_id)}>
                   {kelas.nomor_kelas}
                 </MenuItem>
               ))}
@@ -552,7 +545,8 @@ export default function Ujian() {
                   ) {
                     setDurasi(60);
                   } else {
-                    setDurasi(null)
+                    // setDurasi(null);
+                    setDurasi(0);
                   }
                 }}
               >
@@ -580,7 +574,7 @@ export default function Ujian() {
                 id="demo-simple-select"
                 value={durasi ?? 999}
                 defaultValue={999}
-                onChange={(e) => setDurasi(e.target.value)}
+                onChange={(e) => setDurasi(e.target.value as number)}
               >
                 <MenuItem value={999} disabled>
                   Pilih Durasi Ujian / Ulangan
@@ -604,7 +598,7 @@ export default function Ujian() {
                 id="demo-simple-select"
                 value={semester ?? 0}
                 defaultValue={0}
-                onChange={(e) => setSemester(e.target.value)}
+                onChange={(e) => setSemester(e.target.value as number)}
               >
                 <MenuItem value={0} disabled>
                   Pilih Semester
@@ -630,7 +624,7 @@ export default function Ujian() {
                 id="demo-simple-select"
                 value={jamMulai ?? 999}
                 defaultValue={999}
-                onChange={(e) => setJamMulai(e.target.value)}
+                onChange={(e) => setJamMulai(e.target.value as number)}
               >
                 <MenuItem value={999} disabled>
                   Pilih Jam Mulai Ujian / Ulangan
@@ -661,7 +655,7 @@ export default function Ujian() {
                 value={selectedPelajaran ?? 999}
                 defaultValue={999}
                 onChange={(e) => {
-                  setSelectedPelajaran(e.target.value);
+                  setSelectedPelajaran(e.target.value as number);
                 }}
               >
                 <MenuItem value={999} disabled>
@@ -687,14 +681,14 @@ export default function Ujian() {
                 value={handleKelas ?? 999}
                 defaultValue={999}
                 onChange={(e) => {
-                  setHandlerKelas(e.target.value);
+                  setHandlerKelas(e.target.value as number);
                 }}
               >
                 <MenuItem value={999} disabled>
                   Pilih Kelas
                 </MenuItem>
                 {kelasDatas.map((kelas, i) => (
-                  <MenuItem key={i} value={kelas.kelas_id}>
+                  <MenuItem key={i} value={Number(kelas.kelas_id)}>
                     {kelas.nomor_kelas}
                   </MenuItem>
                 ))}
@@ -782,7 +776,7 @@ export default function Ujian() {
                           }}
                           defaultValue={
                             question.pilihan[cIndex][
-                            "isi_pilihan[" + cIndex + "]"
+                              "isi_pilihan[" + cIndex + "]"
                             ] || ""
                           }
                           label={`Pilihan ${choiceLabel}`}
@@ -1095,7 +1089,7 @@ export default function Ujian() {
                 id="demo-simple-select"
                 value={editDurasi ?? 999}
                 defaultValue={999}
-                onChange={(e) => setEditDurasi(e.target.value)}
+                onChange={(e) => setEditDurasi(Number(e.target.value))}
               >
                 <MenuItem value={999} disabled>
                   Pilih Durasi Ujian / Ulangan
@@ -1119,7 +1113,7 @@ export default function Ujian() {
                 id="demo-simple-select"
                 value={editSemester ?? 0}
                 defaultValue={editSemester}
-                onChange={(e) => setEditSemester(e.target.value)}
+                onChange={(e) => setEditSemester(Number(e.target.value))}
               >
                 <MenuItem value={0} disabled>
                   Pilih Semester
@@ -1145,7 +1139,7 @@ export default function Ujian() {
                 id="demo-simple-select"
                 value={editJamMulai ?? 999}
                 defaultValue={editJamMulai}
-                onChange={(e) => setEditJamMulai(e.target.value)}
+                onChange={(e) => setEditJamMulai(Number(e.target.value))}
               >
                 <MenuItem value={999} disabled>
                   Pilih Jam Mulai Ujian / Ulangan
@@ -1176,7 +1170,7 @@ export default function Ujian() {
                 value={editSelectedPelajaran ?? 999}
                 defaultValue={editSelectedPelajaran}
                 onChange={(e) => {
-                  setEditSelectedPelajaran(e.target.value);
+                  setEditSelectedPelajaran(Number(e.target.value));
                 }}
               >
                 <MenuItem value={999} disabled>
@@ -1203,7 +1197,7 @@ export default function Ujian() {
                 value={editHandleKelas ?? 999}
                 defaultValue={editHandleKelas ?? 999}
                 onChange={(e) => {
-                  setEditHandlerKelas(e.target.value);
+                  setEditHandlerKelas(Number(e.target.value));
                 }}
               >
                 <MenuItem value={999} disabled>
@@ -1627,7 +1621,7 @@ export default function Ujian() {
                 id="demo-simple-select"
                 value={editDurasi ?? 999}
                 defaultValue={999}
-                onChange={(e) => setEditDurasi(e.target.value)}
+                onChange={(e) => setEditDurasi(Number(e.target.value))}
               >
                 <MenuItem value={999} disabled>
                   Pilih Durasi Ujian / Ulangan
@@ -1651,7 +1645,7 @@ export default function Ujian() {
                 id="demo-simple-select"
                 value={editSemester ?? 0}
                 defaultValue={editSemester}
-                onChange={(e) => setEditSemester(e.target.value)}
+                onChange={(e) => setEditSemester(Number(e.target.value))}
               >
                 <MenuItem value={0} disabled>
                   Pilih Semester
@@ -1677,7 +1671,7 @@ export default function Ujian() {
                 id="demo-simple-select"
                 value={editJamMulai ?? 999}
                 defaultValue={editJamMulai}
-                onChange={(e) => setEditJamMulai(e.target.value)}
+                onChange={(e) => setEditJamMulai(Number(e.target.value))}
               >
                 <MenuItem value={999} disabled>
                   Pilih Jam Mulai Ujian / Ulangan
@@ -1708,7 +1702,7 @@ export default function Ujian() {
                 value={editSelectedPelajaran ?? 999}
                 defaultValue={editSelectedPelajaran}
                 onChange={(e) => {
-                  setEditSelectedPelajaran(e.target.value);
+                  setEditSelectedPelajaran(Number(e.target.value));
                 }}
               >
                 <MenuItem value={999} disabled>
@@ -1735,7 +1729,7 @@ export default function Ujian() {
                 value={editHandleKelas ?? 999}
                 defaultValue={editHandleKelas ?? 999}
                 onChange={(e) => {
-                  setEditHandlerKelas(e.target.value);
+                  setEditHandlerKelas(Number(e.target.value));
                 }}
               >
                 <MenuItem value={999} disabled>
@@ -2223,7 +2217,7 @@ export default function Ujian() {
                           } else {
                             setEditJamMulai(
                               row.jam_mulai.split("")[0] +
-                              row.jam_mulai.split("")[1]
+                                row.jam_mulai.split("")[1]
                             );
                           }
                           if (row.tanggal === null) {
@@ -2277,7 +2271,7 @@ export default function Ujian() {
                           } else {
                             setEditJamMulai(
                               row.jam_mulai.split("")[0] +
-                              row.jam_mulai.split("")[1]
+                                row.jam_mulai.split("")[1]
                             );
                           }
                           if (row.tanggal === null) {

@@ -1,10 +1,14 @@
 import { create } from "zustand";
 import axiosNew from "../components/AxiosConfig";
 import { toast } from "react-toastify";
+import { KelasData } from "../models/ujian_models";
+
+
+let modelKelas: KelasData[] = [];
 
 export const useKelas = create((set: any) => ({
 
-  kelas: [],
+  kelas: modelKelas,
 
   fetchKelas: async () => {
     const userId = localStorage.getItem("role_id");
@@ -18,6 +22,43 @@ export const useKelas = create((set: any) => ({
       });
     }
   },
+
+  // getUjian: async () =>{
+  //   setAnswerUser([]);
+  //   if (
+  //     localStorage.getItem("role_id") !== undefined &&
+  //     filterTipeUjian === "Semua"
+  //   ) {
+  //     await axiosNew
+  //       .get("/all-ujian?guru_id=" + localStorage.getItem("role_id"), {})
+  //       .then((res) => {
+  //         setDataUjian(res.data.data);
+  //         setHideModalTrigger(false);
+  //       })
+  //       .catch((err) => {
+  //         toast.error(err.response.data.message ?? "Something Went Wrong")
+  //       });
+  //   } else if (
+  //     localStorage.getItem("role_id") !== undefined ||
+  //     (localStorage.getItem("role_id") !== null && filterTipeUjian !== "Semua")
+  //   ) {
+  //     await axiosNew
+  //       .get(
+  //         "/all-ujian?guru_id=" +
+  //         localStorage.getItem("role_id") +
+  //         "&nama_ujian=" +
+  //         filterTipeUjian,
+  //         {}
+  //       )
+  //       .then((res) => {
+  //         setDataUjian(res.data.data);
+  //         setHideModalTrigger(false);
+  //       })
+  //       .catch((err) => {
+  //         toast.error(err.response.data.message ?? "Something Went Wrong")
+  //       });
+  //   }
+  // }
 }));
 
 // export const useUjian = create((set) => ({
